@@ -1,8 +1,9 @@
 package com.example.paco.trainingapp
 
-import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -11,13 +12,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button.setOnClickListener { toast(text = editText.text) }
-
-        val items = listOf(Item("Title1", "Url1"), Item("Title2", "Url2"))
-
-        val sorted = items
-                .sortedBy (Item::title )
-                .filter { it.url.isNotEmpty() }
-                .map(Item::title)
+        recycler.layoutManager = GridLayoutManager(this, 2)
+        recycler.adapter = ItemAdapter(getItems()) {
+            item -> val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_ID, item.id)
+            startActivity(intent)
+        }
     }
 }
